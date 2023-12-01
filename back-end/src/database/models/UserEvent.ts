@@ -1,3 +1,5 @@
+'use strict';
+
 import { DataTypes, Model, ModelDefined } from "sequelize";
 import sequelize from "./index";
 
