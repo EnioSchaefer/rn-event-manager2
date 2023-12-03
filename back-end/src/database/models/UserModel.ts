@@ -3,17 +3,17 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "./index";
 
-class User extends Model {
+class UserModel extends Model {
   public id?: number;
   public name!: string;
   public username?: string;
   public email!: string;
   public password!: string;
-  public role?: string;
+  public role?: 'customer' | 'manager' | 'admin';
   public birthDate!: Date;
 }
 
-User.init({
+UserModel.init({
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -38,7 +38,7 @@ User.init({
     allowNull: false,
   },
   role: {
-    type: DataTypes.STRING,
+    type: DataTypes.ENUM('customer' , 'manager' , 'admin'),
     allowNull: false,
     defaultValue: 'customer',
   },
@@ -55,4 +55,4 @@ User.init({
   underscored: true,
 });
 
-export default User;
+export default UserModel;

@@ -3,13 +3,13 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "./index";
 
-class UserEvent extends Model {
+class UserEventModel extends Model {
   public userId!: number;
   public eventId!: number;
   public qrCode!: string;
 }
 
-UserEvent.init({
+UserEventModel.init({
   userId: {
     type: DataTypes.INTEGER,
     primaryKey: true,
@@ -47,4 +47,4 @@ UserEvent.init({
   underscored: true,
 });
 
-export default UserEvent;
+export default UserEventModel;

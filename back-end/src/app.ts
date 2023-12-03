@@ -1,6 +1,6 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
-import User from './database/models/User';
+import User from './database/models/UserModel';
 
 const app = express();
 const port = 3001;

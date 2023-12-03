@@ -3,7 +3,7 @@
 import { DataTypes, Model } from "sequelize";
 import sequelize from "./index";
 
-class Event extends Model {
+class EventModel extends Model {
   public id?: number;
   public name!: string;
   public description!: string;
@@ -12,7 +12,7 @@ class Event extends Model {
   public ownerId!: number;
 }
 
-Event.init({
+EventModel.init({
   id: {
     type: DataTypes.INTEGER,
     allowNull: false,
@@ -55,4 +55,4 @@ Event.init({
   underscored: true,
 });
 
-export default Event;
+export default EventModel;
