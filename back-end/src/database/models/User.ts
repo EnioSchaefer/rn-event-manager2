@@ -4,12 +4,12 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "./index";
 
 class User extends Model {
-  public id!: number;
+  public id?: number;
   public name!: string;
-  public username!: string;
+  public username?: string;
   public email!: string;
   public password!: string;
-  public role!: string;
+  public role?: string;
   public birthDate!: Date;
 }
 

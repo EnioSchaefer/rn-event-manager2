@@ -4,7 +4,7 @@ import { DataTypes, Model } from "sequelize";
 import sequelize from "./index";
 
 class Event extends Model {
-  public id!: number;
+  public id?: number;
   public name!: string;
   public description!: string;
   public date!: Date;

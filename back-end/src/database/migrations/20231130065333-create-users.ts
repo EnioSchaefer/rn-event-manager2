@@ -1,11 +1,12 @@
 'use strict';
 
-const { DataTypes } = require('sequelize');
+import { Model, QueryInterface, DataTypes } from "sequelize";
+import { User } from "../types/User";
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  up: async (queryInterface) => {
-    await queryInterface.createTable('users', {
+export default {
+  up(queryInterface: QueryInterface) {
+    return queryInterface.createTable<Model<User>>('users', {
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -42,7 +43,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface) => {
-    await queryInterface.dropTable('users');
+  down(queryInterface: QueryInterface) {
+    return queryInterface.dropTable('users');
   }
 };

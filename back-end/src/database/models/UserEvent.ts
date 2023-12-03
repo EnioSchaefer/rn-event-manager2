@@ -1,6 +1,6 @@
 'use strict';
 
-import { DataTypes, Model, ModelDefined } from "sequelize";
+import { DataTypes, Model } from "sequelize";
 import sequelize from "./index";
 
 class UserEvent extends Model {

@@ -12,7 +12,7 @@ app.get('/', (req: Request, res: Response) => {
   res.send('Hello, World!');
 });
 
-app.get('/user', async (_req: Request, res: Response): Promise<Response<User[]>> => {
+app.get('/users', async (_req: Request, res: Response): Promise<Response<User[]>> => {
   const result = await User.findAll();
 
   return res.status(200).json(result);

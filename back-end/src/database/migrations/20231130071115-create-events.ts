@@ -1,11 +1,12 @@
 'use strict';
 
-const { DataTypes } = require('sequelize');
+import { DataTypes, Model, QueryInterface } from "sequelize";
+import { Event } from "../types/Event";
 
 /** @type {import('sequelize-cli').Migration} */
-module.exports = {
-  up: async (queryInterface) => {
-    await queryInterface.createTable('events', {
+export default {
+  up(queryInterface: QueryInterface) {
+    return queryInterface.createTable<Model<Event>>('events', {
       id: {
         type: DataTypes.INTEGER,
         allowNull: false,
@@ -37,7 +38,7 @@ module.exports = {
     });
   },
 
-  down: async (queryInterface) => {
-    await queryInterface.dropTable('events');
+  down(queryInterface: QueryInterface) {
+    return queryInterface.dropTable('events');
   }
 };
