@@ -1,6 +1,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import User from './database/models/UserModel';
+import UserRoutes from './routes/UserRoutes';
 
 const app = express();
 const port = 3001;
@@ -8,15 +9,15 @@ const port = 3001;
 app.use(cors());
 app.use(express.json());
 
-app.get('/', (req: Request, res: Response) => {
-  res.send('Hello, World!');
+app.get('/status', (req: Request, res: Response) => {
+  try {
+    return res.status(200).send('Api is OK');
+  } catch (error) {
+    return res.status(500).json(error);
+  }
 });
 
-app.get('/users', async (_req: Request, res: Response): Promise<Response<User[]>> => {
-  const result = await User.findAll();
-
-  return res.status(200).json(result);
-});
+app.use('/users', UserRoutes);
 
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);

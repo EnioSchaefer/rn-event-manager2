@@ -1,11 +1,19 @@
 import UserModel from "../database/models/UserModel";
 import { ApiResponse } from "../database/types/ApiResponse";
 import { EditableUser, User } from "../database/types/User";
+import { comparePassword, hashPassword } from "../utils/passwordHashing";
 
 async function registerUser(userData: User): Promise<ApiResponse> {
-    const {dataValues} = await UserModel.create(userData);
+    const userDB = await UserModel.findOne({where: {email: userData.email}});
 
-    return ({type: null, message: dataValues});
+    if (userDB) return ({type: 401, message: 'This email already has an account'});
+
+    const hashedPassword = await hashPassword(userData.password);
+    const hashedUserData = {...userData, password: hashedPassword};
+
+    await UserModel.create(hashedUserData);
+
+    return ({type: null, message: 'Account created successfully!'});
 }
 
 async function loginUser(email: string, password: string): Promise<ApiResponse> {
@@ -13,19 +21,27 @@ async function loginUser(email: string, password: string): Promise<ApiResponse> 
 
     if (!userDB) return ({type: 401, message: 'Invalid email'});
 
-    if (userDB.password !== password) return ({type: 401, message: 'Invalid password'});
+    const validatePassword = comparePassword(userDB.password, password);
+    if (!validatePassword) return ({type: 401, message: 'Invalid password'});
 
-    return ({type: null, message: 'Ok'});
+    return ({type: null, message: 'Log-in successful!'});
 };
 
 async function createUser(userData: User): Promise<ApiResponse> {
-    const {dataValues} = await UserModel.create(userData);
+    const userDB = await UserModel.findOne({where: {email: userData.email}});
 
-    return ({type: null, message: dataValues});
+    if (userDB) return ({type: 401, message: 'This email already has an account'});
+
+    const hashedPassword = await hashPassword(userData.password);
+    const hashedUserData = {...userData, password: hashedPassword};
+
+    await UserModel.create(hashedUserData);
+
+    return ({type: null, message: 'User created'});
 };
 
-async function findOneUser(email: string): Promise<ApiResponse> {
-    const userDB = await UserModel.findOne({where: {email}});
+async function findOneUser(id: number): Promise<ApiResponse> {
+    const userDB = await UserModel.findByPk(id);
 
     if (!userDB) return ({type: 404, message: 'User not found'});
 
@@ -45,20 +61,34 @@ async function editUser(userEditInfo: EditableUser): Promise<ApiResponse> {
 
     userDB?.update({...userEditInfoWithoutEmail});
 
-    return ({type: null, message: userEditInfo});
+    return ({type: null, message: 'Changes applied successfully!'});
 };
 
-async function deleteUser(email: string): Promise<ApiResponse> {
-    await UserModel.destroy({where: {email}});
+async function changePassword(currPassword: string, newPassword: string, userId: number): Promise<ApiResponse> {
+    const userDB = await UserModel.findByPk(userId);
+    const validatePassword = await comparePassword(currPassword, userDB!.password);
 
-    return ({type: null, message: 'Ok'});
+    if (!validatePassword) return ({type: 401, message: 'Incorrect password'});
+
+    const hashedPassword = await hashPassword(newPassword);
+    userDB?.update({password: hashedPassword});
+
+    return ({type: null, message: 'Password changed successfully!'});
+};
+
+async function deleteUser(userId: number): Promise<ApiResponse> {
+    await UserModel.destroy({where: {id: userId}});
+
+    return ({type: null, message: 'User deleted'});
 };
 
 export default {
-    createUser,
+    registerUser,
     loginUser,
+    createUser,
     findOneUser,
     findAllUsers,
     editUser,
+    changePassword,
     deleteUser,
 };
