@@ -20,9 +20,14 @@ export default {
         field: 'event_id',
       },
       qrCode: {
-        type: DataTypes.STRING(200),
+        type: DataTypes.BLOB,
         allowNull: false,
         field: 'qr_code',
+      },
+      used: {
+        type: DataTypes.BOOLEAN,
+        allowNull: false,
+        defaultValue: false,
       },
     });
   },
